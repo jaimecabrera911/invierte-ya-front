@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import apiService from '../services/api';
 import { Fund, SubscribeRequest } from '../types';
+import { FaChartLine, FaExclamationTriangle, FaDollarSign, FaPercentage, FaCalendarAlt, FaCheckCircle, FaSpinner } from 'react-icons/fa';
 import './Funds.css';
 
 const Funds: React.FC = () => {
@@ -115,23 +116,23 @@ const Funds: React.FC = () => {
   return (
     <div className="funds-container">
       <div className="funds-header">
-        <h1>📊 Fondos de Inversión</h1>
+        <h1><FaChartLine /> Fondos de Inversión</h1>
         <p>Explora y suscríbete a nuestros fondos de inversión</p>
         <div className="user-balance">
-          💰 Saldo disponible: <strong>${user?.balance?.toLocaleString('es-CO')} COP</strong>
+          <FaDollarSign /> Saldo disponible: <strong>${user?.balance?.toLocaleString('es-CO')} COP</strong>
         </div>
       </div>
 
       {error && (
         <div className="error-message">
-          ⚠️ {error}
+          <FaExclamationTriangle /> {error}
           <button onClick={() => setError('')} className="close-btn">×</button>
         </div>
       )}
 
       {successMessage && (
         <div className="success-message">
-          ✅ {successMessage}
+          <FaCheckCircle /> {successMessage}
           <button onClick={() => setSuccessMessage('')} className="close-btn">×</button>
         </div>
       )}
@@ -170,9 +171,9 @@ const Funds: React.FC = () => {
 
                   <div className="fund-description">
                     {fund.category === 'FPV' ? (
-                      <p>💼 Ideal para ahorrar para tu pensión con beneficios tributarios.</p>
+                      <p><FaPercentage /> Ideal para ahorrar para tu pensión con beneficios tributarios.</p>
                     ) : (
-                      <p>📈 Diversifica tu portafolio con gestión profesional de inversiones.</p>
+                      <p><FaChartLine /> Diversifica tu portafolio con gestión profesional de inversiones.</p>
                     )}
                   </div>
                 </div>
@@ -214,11 +215,11 @@ const Funds: React.FC = () => {
                   >
                     {subscribingTo === fund.fund_id ? (
                       <>
-                        <span className="loading-spinner small"></span>
+                        <FaSpinner className="spinning" />
                         Suscribiendo...
                       </>
                     ) : (
-                      `💰 Invertir $${amount.toLocaleString('es-CO')}`
+                      <><FaDollarSign /> Invertir ${amount.toLocaleString('es-CO')}</>
                     )}
                   </button>
                 </div>
@@ -227,7 +228,7 @@ const Funds: React.FC = () => {
           })
         ) : (
           <div className="no-funds">
-            <h2>📭 No hay fondos disponibles</h2>
+            <h2><FaExclamationTriangle /> No hay fondos disponibles</h2>
             <p>Actualmente no hay fondos activos para invertir.</p>
             <button onClick={loadFunds} className="retry-btn">
               🔄 Recargar
@@ -237,10 +238,10 @@ const Funds: React.FC = () => {
       </div>
 
       <div className="funds-info">
-        <h2>ℹ️ Información sobre los Fondos</h2>
+        <h2><FaChartLine /> Información sobre los Fondos</h2>
         <div className="info-grid">
           <div className="info-card">
-            <h3>💼 FPV - Fondos de Pensiones Voluntarias</h3>
+            <h3><FaPercentage /> FPV - Fondos de Pensiones Voluntarias</h3>
             <ul>
               <li>Orientados al ahorro para pensión</li>
               <li>Beneficios tributarios</li>
@@ -249,7 +250,7 @@ const Funds: React.FC = () => {
             </ul>
           </div>
           <div className="info-card">
-            <h3>📈 FIC - Fondos de Inversión Colectiva</h3>
+            <h3><FaChartLine /> FIC - Fondos de Inversión Colectiva</h3>
             <ul>
               <li>Diversificación de inversiones</li>
               <li>Gestión profesional</li>

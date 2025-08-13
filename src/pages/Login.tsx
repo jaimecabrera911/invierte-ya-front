@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { FaSignInAlt, FaEnvelope, FaLock, FaExclamationTriangle, FaSpinner } from 'react-icons/fa';
 import './Auth.css';
 
 const Login: React.FC = () => {
@@ -50,19 +51,19 @@ const Login: React.FC = () => {
       <div className="auth-card">
         <div className="auth-header">
           <h1>📈 Invierte Ya</h1>
-          <h2>Iniciar Sesión</h2>
+          <h2><FaSignInAlt /> Iniciar Sesión</h2>
           <p>Accede a tu cuenta para gestionar tus inversiones</p>
         </div>
 
         <form onSubmit={handleSubmit} className="auth-form">
           {error && (
             <div className="error-message">
-              ⚠️ {error}
+              <FaExclamationTriangle /> {error}
             </div>
           )}
 
           <div className="form-group">
-            <label htmlFor="email">📧 Correo Electrónico</label>
+            <label htmlFor="email"><FaEnvelope /> Correo Electrónico</label>
             <input
               type="email"
               id="email"
@@ -76,7 +77,7 @@ const Login: React.FC = () => {
           </div>
 
           <div className="form-group">
-            <label htmlFor="password">🔒 Contraseña</label>
+            <label htmlFor="password"><FaLock /> Contraseña</label>
             <input
               type="password"
               id="password"
@@ -96,11 +97,11 @@ const Login: React.FC = () => {
           >
             {isLoading ? (
               <>
-                <span className="loading-spinner"></span>
+                <FaSpinner className="spinning" />
                 Iniciando sesión...
               </>
             ) : (
-              'Iniciar Sesión'
+              <><FaSignInAlt /> Iniciar Sesión</>
             )}
           </button>
         </form>

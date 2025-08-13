@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import apiService from '../services/api';
+import { FaUser, FaEnvelope, FaDollarSign, FaCalendarAlt, FaEdit, FaSave, FaTimes, FaCheckCircle, FaExclamationTriangle } from 'react-icons/fa';
 import './Profile.css';
 
 const Profile: React.FC = () => {
@@ -107,33 +108,33 @@ const Profile: React.FC = () => {
             <span className="avatar-icon">👤</span>
           </div>
           <div className="profile-title">
-            <h1>Mi Perfil</h1>
+            <h1><FaUser /> Mi Perfil</h1>
             <p>Gestiona tu información personal y preferencias</p>
           </div>
         </div>
 
         {error && (
           <div className="error-message">
-            ⚠️ {error}
+            <FaExclamationTriangle /> {error}
           </div>
         )}
 
         {successMessage && (
           <div className="success-message">
-            {successMessage}
+            <FaCheckCircle /> {successMessage}
           </div>
         )}
 
         <div className="profile-content">
           <div className="profile-section">
             <div className="section-header">
-              <h2>📋 Información Personal</h2>
+              <h2><FaUser /> Información Personal</h2>
               {!isEditing && (
                 <button 
                   onClick={() => setIsEditing(true)}
                   className="edit-btn"
                 >
-                  ✏️ Editar
+                  <FaEdit /> Editar
                 </button>
               )}
             </div>
@@ -141,7 +142,7 @@ const Profile: React.FC = () => {
             {isEditing ? (
               <form onSubmit={handleSubmit} className="profile-form">
                 <div className="form-group">
-                  <label htmlFor="email">📧 Email</label>
+                  <label htmlFor="email"><FaEnvelope /> Email</label>
                   <input
                     type="email"
                     id="email"
@@ -189,7 +190,7 @@ const Profile: React.FC = () => {
                     className="cancel-btn"
                     disabled={isLoading}
                   >
-                    ❌ Cancelar
+                    <FaTimes /> Cancelar
                   </button>
                   <button
                     type="submit"
@@ -202,7 +203,7 @@ const Profile: React.FC = () => {
                         Guardando...
                       </>
                     ) : (
-                      '💾 Guardar Cambios'
+                      <><FaSave /> Guardar Cambios</>
                     )}
                   </button>
                 </div>
@@ -210,7 +211,7 @@ const Profile: React.FC = () => {
             ) : (
               <div className="profile-info">
                 <div className="info-row">
-                  <span className="info-label">📧 Email:</span>
+                  <span className="info-label"><FaEnvelope /> Email:</span>
                   <span className="info-value">{user?.email}</span>
                 </div>
                 
@@ -229,7 +230,7 @@ const Profile: React.FC = () => {
                 </div>
                 
                 <div className="info-row">
-                  <span className="info-label">📅 Miembro desde:</span>
+                  <span className="info-label"><FaCalendarAlt /> Miembro desde:</span>
                   <span className="info-value">
                     {user?.created_at ? formatDate(user.created_at) : 'No disponible'}
                   </span>
@@ -240,7 +241,7 @@ const Profile: React.FC = () => {
 
           <div className="profile-section">
             <div className="section-header">
-              <h2>💰 Información Financiera</h2>
+              <h2><FaDollarSign /> Información Financiera</h2>
             </div>
             
             <div className="financial-info">
