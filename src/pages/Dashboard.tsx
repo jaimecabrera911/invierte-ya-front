@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import apiService from '../services/api';
-import { Fund, Transaction, Subscription } from '../types';
+import type { Fund, Transaction, Subscription } from '../types';
 import './Dashboard.css';
 
 const Dashboard: React.FC = () => {
@@ -44,7 +44,7 @@ const Dashboard: React.FC = () => {
   };
 
   const totalInvested = subscriptions.reduce((total, sub) => {
-    return sub.status === 'ACTIVE' ? total + sub.amount : total;
+    return total + (sub.invested_amount || 0);
   }, 0);
 
   if (isLoading) {
@@ -199,7 +199,7 @@ const Dashboard: React.FC = () => {
                       </span>
                     </div>
                     <div className="subscription-amount">
-                      ${subscription.amount.toLocaleString('es-CO')}
+                      ${(subscription.invested_amount || 0).toLocaleString('es-CO')}
                     </div>
                   </div>
                 ))

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import apiService from '../services/api';
-import { DepositRequest } from '../types';
+import type { DepositRequest } from '../types';
 import './Deposit.css';
 
 const Deposit: React.FC = () => {

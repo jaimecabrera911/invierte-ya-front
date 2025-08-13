@@ -7,6 +7,7 @@ export interface User {
   notification_preference: 'EMAIL' | 'SMS';
   created_at: string;
   balance: number;
+  notifications_enabled?: boolean;
 }
 
 export interface Fund {
@@ -25,6 +26,7 @@ export interface Transaction {
   fund_name?: string;
   timestamp: string;
   status: string;
+  description?: string;
 }
 
 export interface Subscription {

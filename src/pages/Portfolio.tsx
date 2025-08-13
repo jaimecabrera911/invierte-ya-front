@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import apiService from '../services/api';
-import { Subscription, Transaction } from '../types';
+import type { Subscription, Transaction } from '../types';
 import './Portfolio.css';
 
 const Portfolio: React.FC = () => {

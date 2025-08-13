@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
-import apiService from '../services/api';
 import './Profile.css';
 
 const Profile: React.FC = () => {
