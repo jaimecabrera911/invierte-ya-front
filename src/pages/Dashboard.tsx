@@ -3,7 +3,6 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import apiService from '../services/api';
 import { Fund, Transaction, Subscription } from '../types';
-import { FaChartLine, FaChartBar, FaDollarSign, FaMoneyBillWave, FaCreditCard, FaExclamationTriangle, FaHandPaper, FaClipboardList, FaBullseye, FaArrowUp, FaArrowDown } from 'react-icons/fa';
 import './Dashboard.css';
 
 const Dashboard: React.FC = () => {
@@ -62,13 +61,13 @@ const Dashboard: React.FC = () => {
   return (
     <div className="dashboard-container">
       <div className="dashboard-header">
-        <h1>¡Bienvenido, {user?.email?.split('@')[0]}! <FaHandPaper /></h1>
+        <h1>¡Bienvenido, {user?.email?.split('@')[0]}! 👋</h1>
         <p>Aquí tienes un resumen de tu actividad de inversión</p>
       </div>
 
       {error && (
         <div className="error-message">
-          <FaExclamationTriangle /> {error}
+          ⚠️ {error}
           <button onClick={loadDashboardData} className="retry-btn">
             Reintentar
           </button>
@@ -78,25 +77,25 @@ const Dashboard: React.FC = () => {
       <div className="dashboard-grid">
         {/* Resumen financiero */}
         <div className="dashboard-card summary-card">
-          <h2 className="summary-title"><FaDollarSign /> Mi Dinero</h2>
+          <h2 className="summary-title">💰 Mi Dinero</h2>
           
           <div className="money-overview">
             <div className="money-item available">
-              <div className="money-label"><FaMoneyBillWave /> Dinero Disponible</div>
+              <div className="money-label">💵 Dinero Disponible</div>
               <div className="money-amount">
                 ${user?.balance?.toLocaleString('es-CO')} COP
               </div>
             </div>
             
             <div className="money-item invested">
-              <div className="money-label"><FaArrowUp /> Dinero Invertido</div>
+              <div className="money-label">📈 Dinero Invertido</div>
               <div className="money-amount">
                 ${totalInvested.toLocaleString('es-CO')} COP
               </div>
             </div>
             
             <div className="money-item funds">
-              <div className="money-label"><FaChartBar /> Mis Fondos</div>
+              <div className="money-label">📊 Mis Fondos</div>
               <div className="money-amount">
                 {subscriptions.filter(sub => sub.status === 'ACTIVE').length} activos
               </div>
@@ -109,14 +108,14 @@ const Dashboard: React.FC = () => {
               onClick={() => navigate('/deposit')} 
               className="action-btn secondary small"
             >
-              <FaCreditCard /> Agregar Dinero
+              💳 Agregar Dinero
             </button>
             <button 
               id="invest-button" 
               onClick={() => navigate('/funds')} 
               className="action-btn secondary small"
             >
-              <FaChartBar /> Invertir Ahora
+              📊 Invertir Ahora
             </button>
           </div>
         </div>
@@ -124,7 +123,7 @@ const Dashboard: React.FC = () => {
         {/* Fondos destacados */}
         <div className="dashboard-card">
           <div className="card-header">
-            <h2><FaArrowUp /> Fondos Destacados</h2>
+            <h2>📈 Fondos Destacados</h2>
             <Link to="/funds" className="view-all-link">Ver todos</Link>
           </div>
           <div className="funds-list">
@@ -151,7 +150,7 @@ const Dashboard: React.FC = () => {
         {/* Transacciones recientes */}
         <div className="dashboard-card">
           <div className="card-header">
-            <h2><FaClipboardList /> Transacciones Recientes</h2>
+            <h2>📋 Transacciones Recientes</h2>
             <Link to="/transactions" className="view-all-link">Ver todas</Link>
           </div>
           <div className="transactions-list">
@@ -160,9 +159,9 @@ const Dashboard: React.FC = () => {
                 <div key={transaction.transaction_id} className="transaction-item">
                   <div className="transaction-info">
                     <span className={`transaction-type ${transaction.type.toLowerCase()}`}>
-                      {transaction.type === 'DEPOSIT' && <FaCreditCard />}
-                      {transaction.type === 'SUBSCRIPTION' && <FaArrowUp />}
-                      {transaction.type === 'CANCELLATION' && <FaArrowDown />}
+                      {transaction.type === 'DEPOSIT' && '💳'}
+                      {transaction.type === 'SUBSCRIPTION' && '📈'}
+                      {transaction.type === 'CANCELLATION' && '📉'}
                       {transaction.type}
                     </span>
                     <span className="transaction-date">
@@ -183,7 +182,7 @@ const Dashboard: React.FC = () => {
         {/* Mis suscripciones */}
         <div className="dashboard-card">
           <div className="card-header">
-            <h2><FaBullseye /> Mis Suscripciones</h2>
+            <h2>🎯 Mis Suscripciones</h2>
             <Link to="/portfolio" className="view-all-link">Ver portafolio</Link>
           </div>
           <div className="subscriptions-list">

@@ -4,6 +4,7 @@ import {
   Fund,
   Transaction,
   Subscription,
+  SubscriptionsResponse,
   AuthResponse,
   LoginRequest,
   RegisterRequest,
@@ -96,8 +97,8 @@ class ApiService {
   }
 
   async getUserSubscriptions(): Promise<Subscription[]> {
-    const response: AxiosResponse<Subscription[]> = await this.api.get('/users/me/subscriptions');
-    return response.data;
+    const response: AxiosResponse<SubscriptionsResponse> = await this.api.get('/users/me/subscriptions');
+    return response.data.active_subscriptions || [];
   }
 
   // Métodos de fondos

@@ -28,12 +28,24 @@ export interface Transaction {
 }
 
 export interface Subscription {
-  subscription_id: string;
+  subscription_id?: string;
   fund_id: string;
   fund_name: string;
-  amount: number;
+  amount?: number; // Para compatibilidad con código existente
+  amount_invested?: number; // Campo anterior esperado
+  invested_amount: number; // Campo real de la API
   subscription_date: string;
-  status: 'ACTIVE' | 'CANCELLED';
+  status?: 'ACTIVE' | 'CANCELLED'; // Para compatibilidad con código existente
+  is_active?: boolean; // Campo anterior esperado
+  category?: 'FPV' | 'FIC';
+  fund_category: 'FPV' | 'FIC'; // Campo real de la API
+  transaction_id: string;
+}
+
+export interface SubscriptionsResponse {
+  user_id: string;
+  active_subscriptions: Subscription[];
+  count: number;
 }
 
 export interface AuthResponse {

@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import apiService from '../services/api';
 import { Subscription, Transaction } from '../types';
-import { FaChartPie, FaDollarSign, FaArrowUp, FaClipboardList, FaCreditCard, FaArrowDown, FaExclamationTriangle, FaCalendarAlt, FaCheckCircle, FaTimesCircle } from 'react-icons/fa';
 import './Portfolio.css';
 
 const Portfolio: React.FC = () => {
@@ -76,8 +75,7 @@ const Portfolio: React.FC = () => {
 
   const getTotalInvested = () => {
     return subscriptions
-      .filter(sub => sub.status === 'ACTIVE')
-      .reduce((total, sub) => total + (sub.amount || 0), 0);
+      .reduce((total, sub) => total + (sub.invested_amount || 0), 0);
   };
 
   const getTransactionIcon = (type: string) => {
@@ -114,13 +112,13 @@ const Portfolio: React.FC = () => {
   return (
     <div className="portfolio-container">
       <div className="portfolio-header">
-        <h1><FaChartPie /> Mi Portafolio</h1>
+        <h1>📊 Mi Portafolio</h1>
         <p>Gestiona tus inversiones y revisa tu historial financiero</p>
       </div>
 
       {error && (
         <div className="error-message">
-          <FaExclamationTriangle /> {error}
+          ⚠️ {error}
           <button onClick={loadPortfolioData} className="retry-btn">
             🔄 Reintentar
           </button>
@@ -129,7 +127,7 @@ const Portfolio: React.FC = () => {
 
       <div className="portfolio-summary">
         <div className="summary-card">
-          <div className="summary-icon"><FaDollarSign /></div>
+          <div className="summary-icon">💰</div>
           <div className="summary-content">
             <h3>Saldo Disponible</h3>
             <p className="summary-amount">${user?.balance?.toLocaleString('es-CO')} COP</p>
@@ -137,7 +135,7 @@ const Portfolio: React.FC = () => {
         </div>
         
         <div className="summary-card">
-          <div className="summary-icon"><FaArrowUp /></div>
+          <div className="summary-icon">📈</div>
           <div className="summary-content">
             <h3>Total Invertido</h3>
             <p className="summary-amount">${getTotalInvested().toLocaleString('es-CO')} COP</p>
@@ -145,10 +143,10 @@ const Portfolio: React.FC = () => {
         </div>
         
         <div className="summary-card">
-          <div className="summary-icon"><FaCheckCircle /></div>
+          <div className="summary-icon">🎯</div>
           <div className="summary-content">
             <h3>Fondos Activos</h3>
-            <p className="summary-amount">{subscriptions.filter(sub => sub.status === 'ACTIVE').length}</p>
+            <p className="summary-amount">{subscriptions.length}</p>
           </div>
         </div>
       </div>
@@ -158,13 +156,13 @@ const Portfolio: React.FC = () => {
           className={`tab-btn ${activeTab === 'subscriptions' ? 'active' : ''}`}
           onClick={() => setActiveTab('subscriptions')}
         >
-          <FaArrowUp /> Mis Inversiones ({subscriptions.length})
+          📈 Mis Inversiones ({subscriptions.length})
         </button>
         <button 
           className={`tab-btn ${activeTab === 'transactions' ? 'active' : ''}`}
           onClick={() => setActiveTab('transactions')}
         >
-          <FaClipboardList /> Historial ({transactions.length})
+          📋 Historial ({transactions.length})
         </button>
       </div>
 
@@ -172,7 +170,7 @@ const Portfolio: React.FC = () => {
         <div className="subscriptions-section">
           {subscriptions.length === 0 ? (
             <div className="empty-state">
-              <div className="empty-icon"><FaArrowUp /></div>
+              <div className="empty-icon">📈</div>
               <h3>No tienes inversiones activas</h3>
               <p>Comienza a invertir en nuestros fondos disponibles</p>
               <a href="/funds" className="cta-btn">
@@ -182,45 +180,48 @@ const Portfolio: React.FC = () => {
           ) : (
             <div className="subscriptions-grid">
               {subscriptions.map((subscription) => (
-                <div key={subscription.subscription_id} className="subscription-card">
+                <div key={subscription.transaction_id || subscription.fund_id} className="subscription-card">
                   <div className="subscription-header">
                     <h3>{subscription.fund_name}</h3>
-                    <span className={`status-badge ${subscription.status === 'ACTIVE' ? 'active' : 'cancelled'}`}>
-                      {subscription.status === 'ACTIVE' ? <><FaCheckCircle /> Activa</> : <><FaTimesCircle /> Cancelada</>}
+                    <span className="status-badge active">
+                      ✅ Activa
                     </span>
                   </div>
                   
                   <div className="subscription-details">
                     <div className="detail-row">
-                      <span><FaDollarSign /> Monto invertido:</span>
+                      <span>💰 Monto invertido:</span>
                       <span className="amount">
-                        ${subscription.amount?.toLocaleString('es-CO')} COP
+                        ${subscription.invested_amount?.toLocaleString('es-CO')} COP
                       </span>
                     </div>
                     
                     <div className="detail-row">
-                      <span><FaCalendarAlt /> Fecha de suscripción:</span>
+                      <span>📅 Fecha de suscripción:</span>
                       <span>{formatDate(subscription.subscription_date)}</span>
                     </div>
                     
-                    {subscription.status === 'ACTIVE' && (
-                      <div className="subscription-actions">
-                        <button
-                          onClick={() => handleCancelSubscription(subscription.subscription_id)}
-                          className="cancel-btn"
-                          disabled={cancellingId === subscription.subscription_id}
-                        >
-                          {cancellingId === subscription.subscription_id ? (
-                            <>
-                              <span className="loading-spinner small"></span>
-                              Cancelando...
-                            </>
-                          ) : (
-                            <><FaTimesCircle /> Cancelar Suscripción</>
-                          )}
-                        </button>
-                      </div>
-                    )}
+                    <div className="detail-row">
+                      <span>📊 Categoría:</span>
+                      <span>{subscription.fund_category}</span>
+                    </div>
+                    
+                    <div className="subscription-actions">
+                      <button
+                        onClick={() => handleCancelSubscription(subscription.fund_id)}
+                        className="cancel-btn"
+                        disabled={cancellingId === subscription.fund_id}
+                      >
+                        {cancellingId === subscription.fund_id ? (
+                          <>
+                            <span className="loading-spinner small"></span>
+                            Cancelando...
+                          </>
+                        ) : (
+                          '❌ Cancelar Suscripción'
+                        )}
+                      </button>
+                    </div>
                   </div>
                 </div>
               ))}
@@ -233,11 +234,11 @@ const Portfolio: React.FC = () => {
         <div className="transactions-section">
           {transactions.length === 0 ? (
             <div className="empty-state">
-              <div className="empty-icon"><FaClipboardList /></div>
+              <div className="empty-icon">📋</div>
               <h3>No tienes transacciones registradas</h3>
               <p>Realiza tu primer depósito o inversión para ver el historial</p>
               <a href="/deposit" className="cta-btn">
-                <FaDollarSign /> Hacer Depósito
+                💰 Hacer Depósito
               </a>
             </div>
           ) : (

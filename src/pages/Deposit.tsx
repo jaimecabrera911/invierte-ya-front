@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import apiService from '../services/api';
 import { DepositRequest } from '../types';
-import { FaCreditCard, FaDollarSign, FaExclamationTriangle, FaCheckCircle, FaSpinner, FaMoneyBillWave, FaLightbulb, FaInfoCircle, FaLock, FaBolt, FaEnvelope, FaBriefcase, FaChartBar } from 'react-icons/fa';
 import './Deposit.css';
 
 const Deposit: React.FC = () => {
@@ -104,22 +103,22 @@ const Deposit: React.FC = () => {
     <div className="deposit-container">
       <div className="deposit-card">
         <div className="deposit-header">
-          <h1><FaCreditCard /> Depositar Dinero</h1>
+          <h1>💳 Depositar Dinero</h1>
           <p>Agrega fondos a tu cuenta para comenzar a invertir</p>
           <div className="current-balance">
-            <FaDollarSign /> Saldo actual: <strong>${user?.balance?.toLocaleString('es-CO')} COP</strong>
+            💰 Saldo actual: <strong>${user?.balance?.toLocaleString('es-CO')} COP</strong>
           </div>
         </div>
 
         {error && (
           <div className="error-message">
-            <FaExclamationTriangle /> {error}
+            ⚠️ {error}
           </div>
         )}
 
         {successMessage && (
           <div className="success-message">
-            <FaCheckCircle /> {successMessage}
+            ✅ {successMessage}
             <div className="redirect-info">
               Redirigiendo al dashboard en 3 segundos...
             </div>
@@ -128,7 +127,7 @@ const Deposit: React.FC = () => {
 
         <form onSubmit={handleSubmit} className="deposit-form">
           <div className="amount-section">
-            <label htmlFor="amount"><FaMoneyBillWave /> Monto a depositar</label>
+            <label htmlFor="amount">Monto a depositar</label>
             <div className="amount-input-wrapper">
               <span className="currency-symbol">$</span>
               <input
@@ -153,7 +152,7 @@ const Deposit: React.FC = () => {
           </div>
 
           <div className="quick-amounts">
-            <h3><FaLightbulb /> Montos sugeridos</h3>
+            <h3>💡 Montos sugeridos</h3>
             <div className="quick-amounts-grid">
               {quickAmounts.map((quickAmount) => (
                 <button
@@ -195,23 +194,23 @@ const Deposit: React.FC = () => {
           >
             {isLoading ? (
               <>
-                <FaSpinner className="loading-spinner" />
+                <span className="loading-spinner"></span>
                 Procesando depósito...
               </>
             ) : (
-              <><FaDollarSign /> Depositar ${getNumericAmount().toLocaleString('es-CO')} COP</>
+              `💰 Depositar $${getNumericAmount().toLocaleString('es-CO')} COP`
             )}
           </button>
         </form>
 
         <div className="deposit-info">
-          <h3><FaInfoCircle /> Información importante</h3>
+          <h3>ℹ️ Información importante</h3>
           <ul>
-            <li><FaLock /> Todas las transacciones son seguras y encriptadas</li>
-            <li><FaBolt /> Los depósitos se procesan instantáneamente</li>
-            <li><FaEnvelope /> Recibirás una confirmación por email/SMS</li>
-            <li><FaBriefcase /> Los fondos estarán disponibles inmediatamente para invertir</li>
-            <li><FaChartBar /> Puedes ver el historial en la sección de transacciones</li>
+            <li>🔒 Todas las transacciones son seguras y encriptadas</li>
+            <li>⚡ Los depósitos se procesan instantáneamente</li>
+            <li>📧 Recibirás una confirmación por email/SMS</li>
+            <li>💼 Los fondos estarán disponibles inmediatamente para invertir</li>
+            <li>📊 Puedes ver el historial en la sección de transacciones</li>
           </ul>
         </div>
       </div>

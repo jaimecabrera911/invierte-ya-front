@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { FaChartLine, FaUser, FaDollarSign } from 'react-icons/fa';
 import './Navbar.css';
 
 const Navbar: React.FC = () => {
@@ -33,7 +32,7 @@ const Navbar: React.FC = () => {
       <nav className="navbar">
         <div className="nav-container">
           <Link to="/" className="nav-logo">
-            <FaChartLine /> Invierte Ya
+            📈 Invierte Ya
           </Link>
           <div className="nav-menu">
             <Link to="/login" className={isActive('/login')}>
@@ -52,7 +51,7 @@ const Navbar: React.FC = () => {
     <nav className="navbar">
       <div className="nav-container">
         <Link to="/dashboard" className="nav-logo">
-          <FaChartLine /> Invierte Ya
+          📈 Invierte Ya
         </Link>
         <div className={`nav-menu ${isMobileMenuOpen ? 'active' : ''}`}>
           <Link to="/dashboard" className={isActive('/dashboard')} onClick={closeMobileMenu}>
@@ -73,10 +72,10 @@ const Navbar: React.FC = () => {
         </div>
         <div className="nav-user">
           <span className="user-info">
-            <FaUser /> {user?.email}
+            👤 {user?.email}
           </span>
           <span className="user-balance">
-            <FaDollarSign /> ${user?.balance?.toLocaleString('es-CO')} COP
+            💰 ${user?.balance?.toLocaleString('es-CO')} COP
           </span>
           <button onClick={handleLogout} className="logout-btn">
             Cerrar Sesión

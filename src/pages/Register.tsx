@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { FaUserPlus, FaEnvelope, FaLock, FaExclamationTriangle, FaSpinner } from 'react-icons/fa';
 import './Auth.css';
 
 const Register: React.FC = () => {
@@ -75,19 +74,19 @@ const Register: React.FC = () => {
       <div className="auth-card">
         <div className="auth-header">
           <h1>📈 Invierte Ya</h1>
-          <h2><FaUserPlus /> Crear Cuenta</h2>
+          <h2>Crear Cuenta</h2>
           <p>Únete a nosotros y comienza a invertir hoy</p>
         </div>
 
         <form onSubmit={handleSubmit} className="auth-form">
           {error && (
             <div className="error-message">
-              <FaExclamationTriangle /> {error}
+              ⚠️ {error}
             </div>
           )}
 
           <div className="form-group">
-            <label htmlFor="email"><FaEnvelope /> Correo Electrónico</label>
+            <label htmlFor="email">📧 Correo Electrónico</label>
             <input
               type="email"
               id="email"
@@ -115,7 +114,7 @@ const Register: React.FC = () => {
           </div>
 
           <div className="form-group">
-            <label htmlFor="password"><FaLock /> Contraseña</label>
+            <label htmlFor="password">🔒 Contraseña</label>
             <input
               type="password"
               id="password"
@@ -130,7 +129,7 @@ const Register: React.FC = () => {
           </div>
 
           <div className="form-group">
-            <label htmlFor="confirmPassword"><FaLock /> Confirmar Contraseña</label>
+            <label htmlFor="confirmPassword">🔒 Confirmar Contraseña</label>
             <input
               type="password"
               id="confirmPassword"
@@ -164,11 +163,11 @@ const Register: React.FC = () => {
           >
             {isLoading ? (
               <>
-                <FaSpinner className="spinning" />
+                <span className="loading-spinner"></span>
                 Creando cuenta...
               </>
             ) : (
-              <><FaUserPlus /> Crear Cuenta</>
+              'Crear Cuenta'
             )}
           </button>
         </form>
