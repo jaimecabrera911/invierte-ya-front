@@ -118,6 +118,8 @@
   font-size: 1rem;
   transition: var(--transition);
   background: var(--gray-50);
+  min-width: 0;
+  max-width: 100%;
 }
 
 .form-input:focus {

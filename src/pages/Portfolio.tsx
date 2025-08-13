@@ -27,13 +27,17 @@ const Portfolio: React.FC = () => {
         apiService.getUserTransactions()
       ]);
       
-      setSubscriptions(subscriptionsData);
-      setTransactions(transactionsData);
+      // Ensure data is arrays before setting state
+      setSubscriptions(Array.isArray(subscriptionsData) ? subscriptionsData : []);
+      setTransactions(Array.isArray(transactionsData) ? transactionsData : []);
     } catch (err: any) {
       setError(
         err.response?.data?.message || 
         'Error al cargar la información del portafolio'
       );
+      // Set empty arrays on error
+      setSubscriptions([]);
+      setTransactions([]);
     } finally {
       setIsLoading(false);
     }
@@ -71,24 +75,26 @@ const Portfolio: React.FC = () => {
 
   const getTotalInvested = () => {
     return subscriptions
-      .filter(sub => sub.status === 'active')
+      .filter(sub => sub.status === 'ACTIVE')
       .reduce((total, sub) => total + (sub.amount || 0), 0);
   };
 
   const getTransactionIcon = (type: string) => {
-    switch (type) {
-      case 'deposit': return '💰';
-      case 'subscription': return '📈';
-      case 'cancellation': return '📉';
+    const t = (type || '').toUpperCase();
+    switch (t) {
+      case 'DEPOSIT': return '💰';
+      case 'SUBSCRIPTION': return '📈';
+      case 'CANCELLATION': return '📉';
       default: return '💳';
     }
   };
 
   const getTransactionColor = (type: string) => {
-    switch (type) {
-      case 'deposit': return 'transaction-positive';
-      case 'subscription': return 'transaction-investment';
-      case 'cancellation': return 'transaction-negative';
+    const t = (type || '').toUpperCase();
+    switch (t) {
+      case 'DEPOSIT': return 'transaction-positive';
+      case 'SUBSCRIPTION': return 'transaction-investment';
+      case 'CANCELLATION': return 'transaction-negative';
       default: return 'transaction-neutral';
     }
   };
@@ -141,7 +147,7 @@ const Portfolio: React.FC = () => {
           <div className="summary-icon">🎯</div>
           <div className="summary-content">
             <h3>Fondos Activos</h3>
-            <p className="summary-amount">{subscriptions.filter(sub => sub.status === 'active').length}</p>
+            <p className="summary-amount">{subscriptions.filter(sub => sub.status === 'ACTIVE').length}</p>
           </div>
         </div>
       </div>
@@ -175,11 +181,11 @@ const Portfolio: React.FC = () => {
           ) : (
             <div className="subscriptions-grid">
               {subscriptions.map((subscription) => (
-                <div key={subscription.id} className="subscription-card">
+                <div key={subscription.subscription_id} className="subscription-card">
                   <div className="subscription-header">
                     <h3>{subscription.fund_name}</h3>
-                    <span className={`status-badge ${subscription.status}`}>
-                      {subscription.status === 'active' ? '✅ Activa' : '❌ Cancelada'}
+                    <span className={`status-badge ${subscription.status === 'ACTIVE' ? 'active' : 'cancelled'}`}>
+                      {subscription.status === 'ACTIVE' ? '✅ Activa' : '❌ Cancelada'}
                     </span>
                   </div>
                   
@@ -193,17 +199,17 @@ const Portfolio: React.FC = () => {
                     
                     <div className="detail-row">
                       <span>📅 Fecha de suscripción:</span>
-                      <span>{formatDate(subscription.created_at)}</span>
+                      <span>{formatDate(subscription.subscription_date)}</span>
                     </div>
                     
-                    {subscription.status === 'active' && (
+                    {subscription.status === 'ACTIVE' && (
                       <div className="subscription-actions">
                         <button
-                          onClick={() => handleCancelSubscription(subscription.id)}
+                          onClick={() => handleCancelSubscription(subscription.subscription_id)}
                           className="cancel-btn"
-                          disabled={cancellingId === subscription.id}
+                          disabled={cancellingId === subscription.subscription_id}
                         >
-                          {cancellingId === subscription.id ? (
+                          {cancellingId === subscription.subscription_id ? (
                             <>
                               <span className="loading-spinner small"></span>
                               Cancelando...
@@ -236,7 +242,7 @@ const Portfolio: React.FC = () => {
           ) : (
             <div className="transactions-list">
               {transactions.map((transaction) => (
-                <div key={transaction.id} className="transaction-item">
+                <div key={transaction.transaction_id} className="transaction-item">
                   <div className="transaction-icon">
                     {getTransactionIcon(transaction.type)}
                   </div>
@@ -245,12 +251,12 @@ const Portfolio: React.FC = () => {
                     <div className="transaction-main">
                       <h4>{transaction.description}</h4>
                       <span className="transaction-date">
-                        {formatDate(transaction.created_at)}
+                        {formatDate(transaction.timestamp)}
                       </span>
                     </div>
                     
                     <div className={`transaction-amount ${getTransactionColor(transaction.type)}`}>
-                      {transaction.type === 'deposit' ? '+' : '-'}
+                      {(transaction.type || '').toUpperCase() === 'DEPOSIT' ? '+' : '-'}
                       ${transaction.amount.toLocaleString('es-CO')} COP
                     </div>
                   </div>

@@ -81,6 +81,9 @@
   font-size: 1rem;
   transition: var(--transition);
   background-color: var(--gray-50);
+  min-width: 0;
+  width: 100%;
+  max-width: 100%;
 }
 
 .form-group input:focus,

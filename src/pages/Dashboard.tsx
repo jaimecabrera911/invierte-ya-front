@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import apiService from '../services/api';
 import { Fund, Transaction, Subscription } from '../types';
@@ -7,6 +7,7 @@ import './Dashboard.css';
 
 const Dashboard: React.FC = () => {
   const { user, refreshUser } = useAuth();
+  const navigate = useNavigate();
   const [funds, setFunds] = useState<Fund[]>([]);
   const [recentTransactions, setRecentTransactions] = useState<Transaction[]>([]);
   const [subscriptions, setSubscriptions] = useState<Subscription[]>([]);
@@ -28,9 +29,9 @@ const Dashboard: React.FC = () => {
         apiService.getUserSubscriptions()
       ]);
       
-      setFunds(fundsData.slice(0, 3)); // Mostrar solo los primeros 3 fondos
-      setRecentTransactions(transactionsData.slice(0, 5)); // Últimas 5 transacciones
-      setSubscriptions(subscriptionsData);
+      setFunds(Array.isArray(fundsData) ? fundsData.slice(0, 3) : []); // Mostrar solo los primeros 3 fondos
+      setRecentTransactions(Array.isArray(transactionsData) ? transactionsData.slice(0, 5) : []); // Últimas 5 transacciones
+      setSubscriptions(Array.isArray(subscriptionsData) ? subscriptionsData : []);
       
       // Refrescar información del usuario
       await refreshUser();
@@ -76,34 +77,46 @@ const Dashboard: React.FC = () => {
       <div className="dashboard-grid">
         {/* Resumen financiero */}
         <div className="dashboard-card summary-card">
-          <h2>💰 Resumen Financiero</h2>
-          <div className="summary-stats">
-            <div className="stat-item">
-              <span className="stat-label">Saldo Disponible</span>
-              <span className="stat-value balance">
+          <h2 className="summary-title">💰 Mi Dinero</h2>
+          
+          <div className="money-overview">
+            <div className="money-item available">
+              <div className="money-label">💵 Dinero Disponible</div>
+              <div className="money-amount">
                 ${user?.balance?.toLocaleString('es-CO')} COP
-              </span>
+              </div>
             </div>
-            <div className="stat-item">
-              <span className="stat-label">Total Invertido</span>
-              <span className="stat-value invested">
+            
+            <div className="money-item invested">
+              <div className="money-label">📈 Dinero Invertido</div>
+              <div className="money-amount">
                 ${totalInvested.toLocaleString('es-CO')} COP
-              </span>
+              </div>
             </div>
-            <div className="stat-item">
-              <span className="stat-label">Fondos Activos</span>
-              <span className="stat-value funds">
-                {subscriptions.filter(sub => sub.status === 'ACTIVE').length}
-              </span>
+            
+            <div className="money-item funds">
+              <div className="money-label">📊 Mis Fondos</div>
+              <div className="money-amount">
+                {subscriptions.filter(sub => sub.status === 'ACTIVE').length} activos
+              </div>
             </div>
           </div>
-          <div className="summary-actions">
-            <Link to="/deposit" className="action-btn primary">
-              💳 Depositar Dinero
-            </Link>
-            <Link to="/funds" className="action-btn secondary">
-              📊 Ver Fondos
-            </Link>
+          
+          <div className="quick-actions">
+            <button 
+              id="add-money-button" 
+              onClick={() => navigate('/deposit')} 
+              className="action-btn secondary small"
+            >
+              💳 Agregar Dinero
+            </button>
+            <button 
+              id="invest-button" 
+              onClick={() => navigate('/funds')} 
+              className="action-btn secondary small"
+            >
+              📊 Invertir Ahora
+            </button>
           </div>
         </div>
 
@@ -199,33 +212,6 @@ const Dashboard: React.FC = () => {
               </div>
             )}
           </div>
-        </div>
-      </div>
-
-      {/* Acciones rápidas */}
-      <div className="quick-actions">
-        <h2>🚀 Acciones Rápidas</h2>
-        <div className="actions-grid">
-          <Link to="/deposit" className="quick-action-card">
-            <div className="action-icon">💳</div>
-            <h3>Depositar</h3>
-            <p>Agregar dinero a tu cuenta</p>
-          </Link>
-          <Link to="/funds" className="quick-action-card">
-            <div className="action-icon">📊</div>
-            <h3>Invertir</h3>
-            <p>Explorar fondos disponibles</p>
-          </Link>
-          <Link to="/portfolio" className="quick-action-card">
-            <div className="action-icon">🎯</div>
-            <h3>Portafolio</h3>
-            <p>Gestionar tus inversiones</p>
-          </Link>
-          <Link to="/profile" className="quick-action-card">
-            <div className="action-icon">⚙️</div>
-            <h3>Configurar</h3>
-            <p>Ajustar tu perfil</p>
-          </Link>
         </div>
       </div>
     </div>

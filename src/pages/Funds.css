@@ -38,7 +38,7 @@
 
 .funds-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: 25px;
   margin-bottom: 40px;
 }
@@ -195,6 +195,9 @@
   font-weight: 600;
   color: #333;
   outline: none;
+  min-width: 0; /* allow shrinking */
+  width: 100%;
+  max-width: 100%;
 }
 
 .amount-input::placeholder {
@@ -447,19 +450,25 @@
     padding: 10px;
   }
   
+  .funds-grid {
+    grid-template-columns: 1fr;
+    gap: 15px;
+  }
+  
   .fund-card {
-    padding: 20px;
+    padding: 15px;
+    margin: 0;
   }
   
   .funds-header h1 {
-    font-size: 2rem;
+    font-size: 1.8rem;
   }
   
   .amount-input-wrapper {
-    padding: 0 12px;
+    padding: 0 8px;
   }
   
   .amount-input {
-    font-size: 1rem;
+    font-size: 0.9rem;
   }
 }

@@ -67,6 +67,17 @@ function App() {
                 </ProtectedRoute>
               } />
               
+              <Route path="/transactions" element={
+                <ProtectedRoute>
+                  <>
+                    <Navbar />
+                    <main className="main-content">
+                      <Portfolio />
+                    </main>
+                  </>
+                </ProtectedRoute>
+              } />
+              
               <Route path="/profile" element={
                 <ProtectedRoute>
                   <>
