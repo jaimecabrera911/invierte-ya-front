@@ -1,0 +1,14 @@
+[
+  {
+    "ParameterKey": "Repository",
+    "ParameterValue": "https://github.com/jaimecavbrera911/invierta-ya-front"
+  },
+  {
+    "ParameterKey": "Branch",
+    "ParameterValue": "main"
+  },
+  {
+    "ParameterKey": "AccessToken",
+    "ParameterValue": "ghp_REPLACE_WITH_YOUR_GITHUB_TOKEN"
+  }
+]

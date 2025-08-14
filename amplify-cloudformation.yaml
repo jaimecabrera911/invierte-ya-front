@@ -1,0 +1,75 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: 'AWS Amplify App for Invierte Ya Frontend'
+
+Parameters:
+  Repository:
+    Type: String
+    Description: GitHub repository URL
+    Default: 'https://github.com/your-username/invierta-ya-front'
+  
+  Branch:
+    Type: String
+    Description: Repository branch
+    Default: 'main'
+  
+  AccessToken:
+    Type: String
+    Description: GitHub personal access token
+    NoEcho: true
+
+Resources:
+  AmplifyApp:
+    Type: AWS::Amplify::App
+    Properties:
+      Name: invierta-ya-frontend
+      Repository: !Ref Repository
+      AccessToken: !Ref AccessToken
+      BuildSpec: |
+        version: 1
+        frontend:
+          phases:
+            preBuild:
+              commands:
+                - npm ci
+            build:
+              commands:
+                - npm run build
+          artifacts:
+            baseDirectory: dist
+            files:
+              - '**/*'
+          cache:
+            paths:
+              - node_modules/**/*
+      EnvironmentVariables:
+        - Name: AMPLIFY_DIFF_DEPLOY
+          Value: false
+        - Name: AMPLIFY_MONOREPO_APP_ROOT
+          Value: .
+
+  AmplifyBranch:
+    Type: AWS::Amplify::Branch
+    Properties:
+      AppId: !GetAtt AmplifyApp.AppId
+      BranchName: !Ref Branch
+      EnableAutoBuild: true
+      EnablePullRequestPreview: true
+
+Outputs:
+  AmplifyAppId:
+    Description: 'Amplify App ID'
+    Value: !GetAtt AmplifyApp.AppId
+    Export:
+      Name: !Sub '${AWS::StackName}-AmplifyAppId'
+  
+  AmplifyAppUrl:
+    Description: 'Amplify App URL'
+    Value: !Sub 'https://${AmplifyBranch.BranchName}.${AmplifyApp.DefaultDomain}'
+    Export:
+      Name: !Sub '${AWS::StackName}-AmplifyAppUrl'
+  
+  AmplifyConsoleUrl:
+    Description: 'Amplify Console URL'
+    Value: !Sub 'https://console.aws.amazon.com/amplify/home#/${AmplifyApp.AppId}/${AmplifyBranch.BranchName}'
+    Export:
+      Name: !Sub '${AWS::StackName}-AmplifyConsoleUrl'
