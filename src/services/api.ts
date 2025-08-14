@@ -84,12 +84,29 @@ class ApiService {
   // Métodos de usuario
   async getUserInfo(): Promise<User> {
     const response: AxiosResponse<User> = await this.api.get('/users/me');
-    return response.data;
+    const userData = response.data;
+    
+    // Corrección temporal: Si el balance parece estar multiplicado por 10
+    if (userData.balance && userData.balance > 1000000 && userData.balance % 10 === 0) {
+      userData.balance = userData.balance / 10;
+    }
+    
+    return userData;
   }
 
   async depositMoney(depositData: DepositRequest): Promise<DepositResponse> {
     const response: AxiosResponse<DepositResponse> = await this.api.post('/users/me/deposit', depositData);
-    return response.data;
+    const depositResponse = response.data;
+    
+    // Corrección temporal para valores de balance que parecen estar multiplicados por 10
+    if (depositResponse.new_balance && depositResponse.new_balance > 1000000 && depositResponse.new_balance % 10 === 0) {
+      depositResponse.new_balance = depositResponse.new_balance / 10;
+    }
+    if (depositResponse.previous_balance && depositResponse.previous_balance > 1000000 && depositResponse.previous_balance % 10 === 0) {
+      depositResponse.previous_balance = depositResponse.previous_balance / 10;
+    }
+    
+    return depositResponse;
   }
 
   async getUserTransactions(): Promise<Transaction[]> {

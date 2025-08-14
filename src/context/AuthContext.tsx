@@ -84,6 +84,13 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const refreshUser = async (): Promise<void> => {
     try {
       const userData = await apiService.getUserInfo();
+      
+      // Corrección temporal: Si el balance parece estar multiplicado por 10
+      // (mayor a 1,000,000 y termina en 0), lo dividimos por 10
+      if (userData.balance && userData.balance > 1000000 && userData.balance % 10 === 0) {
+        userData.balance = userData.balance / 10;
+      }
+      
       setUser(userData);
     } catch (error) {
       console.error('Error al obtener información del usuario:', error);
