@@ -106,7 +106,7 @@ const Deposit: React.FC = () => {
           <h1>💳 Depositar Dinero</h1>
           <p>Agrega fondos a tu cuenta para comenzar a invertir</p>
           <div className="current-balance">
-            💰 Saldo actual: <strong>${user?.balance?.toLocaleString('es-CO')} COP</strong>
+            💰 Saldo actual: <strong>${Number(user?.balance ?? 0).toLocaleString('es-CO')} COP</strong>
           </div>
         </div>
 
@@ -177,12 +177,12 @@ const Deposit: React.FC = () => {
             </div>
             <div className="summary-row">
               <span>Saldo actual:</span>
-              <span>${user?.balance?.toLocaleString('es-CO')} COP</span>
+              <span>${Number(user?.balance ?? 0).toLocaleString('es-CO')} COP</span>
             </div>
             <div className="summary-row total">
               <span>Nuevo saldo:</span>
               <span className="new-balance">
-                ${((user?.balance || 0) + getNumericAmount()).toLocaleString('es-CO')} COP
+                ${(Number(user?.balance ?? 0) + getNumericAmount()).toLocaleString('es-CO')} COP
               </span>
             </div>
           </div>
