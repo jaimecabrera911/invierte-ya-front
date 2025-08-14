@@ -97,7 +97,7 @@ const Dashboard: React.FC = () => {
             <div className="money-item funds">
               <div className="money-label">📊 Mis Fondos</div>
               <div className="money-amount">
-                {subscriptions.filter(sub => sub.status === 'ACTIVE').length} activos
+                {subscriptions.length} activos
               </div>
             </div>
           </div>
@@ -186,9 +186,8 @@ const Dashboard: React.FC = () => {
             <Link to="/portfolio" className="view-all-link">Ver portafolio</Link>
           </div>
           <div className="subscriptions-list">
-            {subscriptions.filter(sub => sub.status === 'ACTIVE').length > 0 ? (
+            {subscriptions.length > 0 ? (
               subscriptions
-                .filter(sub => sub.status === 'ACTIVE')
                 .slice(0, 3)
                 .map((subscription) => (
                   <div key={subscription.subscription_id} className="subscription-item">

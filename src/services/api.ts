@@ -93,8 +93,36 @@ class ApiService {
   }
 
   async getUserTransactions(): Promise<Transaction[]> {
-    const response: AxiosResponse<Transaction[]> = await this.api.get('/users/me/transactions');
-    return response.data;
+    const response = await this.api.get('/users/me/transactions');
+    
+    // La API devuelve un objeto con una propiedad 'transactions'
+    const transactionsData = response.data.transactions || response.data;
+    
+    // Mapear los datos para que coincidan con la interfaz Transaction
+    return transactionsData.map((transaction: any) => ({
+      transaction_id: transaction.transaction_id,
+      type: transaction.transaction_type?.toUpperCase() || transaction.type?.toUpperCase(),
+      amount: transaction.amount,
+      fund_id: transaction.fund_id,
+      fund_name: transaction.fund_name,
+      timestamp: transaction.timestamp,
+      status: transaction.status,
+      description: transaction.description || this.getTransactionDescription(transaction)
+    }));
+  }
+
+  private getTransactionDescription(transaction: any): string {
+    const type = transaction.transaction_type || transaction.type;
+    switch (type?.toLowerCase()) {
+      case 'subscription':
+        return `Inversión en fondo ${transaction.fund_id}`;
+      case 'cancellation':
+        return `Cancelación de inversión en fondo ${transaction.fund_id}`;
+      case 'deposit':
+        return 'Depósito de dinero';
+      default:
+        return 'Transacción';
+    }
   }
 
   async getUserSubscriptions(): Promise<Subscription[]> {
