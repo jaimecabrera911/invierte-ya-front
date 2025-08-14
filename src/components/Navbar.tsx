@@ -63,9 +63,6 @@ const Navbar: React.FC = () => {
           <Link to="/portfolio" className={isActive('/portfolio')} onClick={closeMobileMenu}>
             Mi Portafolio
           </Link>
-          <Link to="/transactions" className={isActive('/transactions')} onClick={closeMobileMenu}>
-            Transacciones
-          </Link>
           <Link to="/profile" className={isActive('/profile')} onClick={closeMobileMenu}>
             Perfil
           </Link>
